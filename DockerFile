@@ -1,0 +1,19 @@
+# Utiliza una imagen base de MySQL
+FROM mysql:latest
+
+# Establece las variables de entorno para MySQL
+ENV MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+ENV MYSQL_DATABASE=${DB_NAME}
+
+# Instala PHPMyAdmin
+RUN apt-get update && \
+    apt-get install -y phpmyadmin
+
+# Configura PHPMyAdmin para que funcione con MySQL
+RUN echo 'Include /etc/phpmyadmin/apache.conf' >> /etc/apache2/apache2.conf
+
+# Exponer el puerto de PHPMyAdmin
+EXPOSE 80
+
+# Inicia el servidor de MySQL y PHPMyAdmin
+CMD ["bash", "-c", "/etc/init.d/apache2 start && exec mysqld"]
